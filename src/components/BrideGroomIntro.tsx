@@ -1,0 +1,42 @@
+export default function BrigeGroomIntoro() {
+  return (
+    <>
+      <div className="relative max-w-prose mx-auto text-black">
+        <img src="/images/brigeGroomIntoroLayer2.png" alt="" className="" />
+        <div className="rounded-2xl shadow-lg bg-[url('/images/brigeGroomIntoro.jpg')] bg-cover bg-center p-8 mb-10 max-w-prose md:mx-auto mx-2.5">
+          <img
+            src="/images/brigeGroomIntoroLayer.png"
+            alt=""
+            className="mx-auto w-24 md:w-50 mb-10"
+          />
+          <div className="text-center space-y-5 md:space-y-10">
+            <div>
+              <p>
+                皆さまいかがお過ごしでしょうか
+                <br />
+                このたび私たちは結婚式を挙げることになりました
+                <br />
+                つきましてはご挨拶をかねて
+                <br />
+                ささやかなパーティーを催したいと思います
+                <br />
+                ご多用中誠に恐縮ではございますが
+                <br />
+                ぜひご出席いただきたくご案内申し上げます
+                <br />
+              </p>
+            </div>
+            <div>
+              <p>敬具</p>
+              <p>令和〇年〇月吉日</p>
+            </div>
+            <div>
+              <p>廣野　晃司</p>
+              <p>廣野　有希</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
