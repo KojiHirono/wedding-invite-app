@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RadioGroup } from "./form/RadioGroup";
 import TextField from "./form/TextField";
 import TextArea from "./form/TextArea";
@@ -6,6 +6,7 @@ import FormLabel from "./form/FormLabel";
 import EmailInput from "./form/EmailInput";
 import AddressField from "./form/AddressField";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 type Props = {
   isOpen: boolean;
@@ -93,6 +94,20 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
+  const showSpeech = attendance === "absent";
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -104,13 +119,13 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-[url('/images/brigeGroomIntoro.jpg')] rounded-2xl shadow-lg w-full md:max-w-3xl relative max-h-screen overflow-hidden"
+            className="bg-[url('/images/brigeGroomIntoro.jpg')] rounded-2xl shadow-lg w-full lg:max-w-3xl relative max-h-[90vh] overflow-hidden m-2.5"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 50, opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="max-h-screen overflow-y-auto space-y-4 p-6">
+            <div className="max-h-[90vh] overflow-y-auto space-y-4 p-6">
               <button
                 type="button"
                 onClick={onClose}
@@ -118,20 +133,41 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
               >
                 × とじる
               </button>
-              <div className="flex gap-2 items-center justify-center mb-14">
+              <div className="relative flex gap-20 items-center justify-center mb-14">
+                <div className="absolute left-1/2 -translate-x-1/2">
+                  <Image
+                    src="/images/countDownTimerLayer3.png"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    className="w-20"
+                    alt=""
+                  />
+                  <AnimatePresence>
+                    {showSpeech && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute -top-5 right-15 bg-white border border-gray-300 rounded-lg px-3 py-1 shadow w-full"
+                      >
+                        あぁ...
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
                 <RadioGroup
                   name="attendance"
                   value={attendance}
                   onChange={setAttendance}
                   options={[
-                    { label: "出　席", value: "attending" },
-                    { label: "欠　席", value: "absent" },
-                    { label: "保　留", value: "pending" },
+                    { label: "ご出席", value: "attending" },
+                    { label: "ご欠席", value: "absent" },
                   ]}
                   className="py-10"
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel
                   label="ゲストカテゴリー"
                   hint="Guest Category"
@@ -147,52 +183,52 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   ]}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="名前" hint="Name" required />
                 <TextField
                   name="lastName"
-                  placeholder="萩野"
+                  placeholder="湯"
                   value={lastName}
                   onChange={setLastName}
                 />
                 <TextField
                   name="firstName"
-                  placeholder="千尋"
+                  placeholder="婆婆"
                   value={firstName}
                   onChange={setFirstName}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="かな" hint="Kana" required />
                 <TextField
                   name="lastKana"
-                  placeholder="はぎの"
+                  placeholder="ゆ"
                   value={lastKana}
                   onChange={setLastKana}
                 />
                 <TextField
                   name="firstKana"
-                  placeholder="ちひろ"
+                  placeholder="ばーば"
                   value={firstKana}
                   onChange={setFirstKana}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="ローマ字" hint="Latin Alphabet" required />
                 <TextField
                   name="lastAlphabet"
-                  placeholder="hagino"
+                  placeholder="yu"
                   value={lastAlphabet}
                   onChange={setLastAlphabet}
                 />
                 <TextField
                   name="firstAlphabet"
-                  placeholder="chihiro"
+                  placeholder="ba-ba"
                   value={firstAlphabet}
                   onChange={setFirstAlphabet}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel
                   label="メールアドレス"
                   hint="Email Address"
@@ -213,7 +249,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 building={building}
                 setBuilding={setBuilding}
               />
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel
                   label="食事制限"
                   hint="Dietary Restrictions"
@@ -229,7 +265,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   ]}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="アレルギー" hint="Allergy" required={false} />
                 <TextArea
                   name="allergy"
@@ -238,7 +274,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   placeholder="えび　かに　そば　卵　乳　どんぐり　etc."
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="犬アレルギー" hint="Dog Allegy" required />
                 <RadioGroup
                   name="dogAllegy"
@@ -250,7 +286,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   ]}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="メッセージ" hint="Message" required={false} />
                 <TextArea
                   name="message"

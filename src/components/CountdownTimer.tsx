@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 type TimeLeft = {
   days: number;
@@ -9,6 +11,8 @@ type TimeLeft = {
 
 const CountdownTimer = () => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
+  // const ref = useRef(null);
+  // const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   useEffect(() => {
     const calculateTimeLeft = (): TimeLeft => {
@@ -40,43 +44,72 @@ const CountdownTimer = () => {
 
   return (
     <>
-      <div className="relative bg-[url('/images/countDownTimerBg.jpg')] bg-[0%_50%] bg-no-repeat bg-cover shadow-inner py-10">
-        <img
-          src="/images/countDownTimerLayer1.png"
-          alt=""
-          className="absolute bottom-0 left-0 w-24 md:w-72"
-        />
-        <img
-          src="/images/countDownTimerLayer2.png"
-          alt=""
-          className="absolute top-0 right-0 w-24 md:w-72"
-        />
-        {/* <img
-          src="/images/countDownTimerLayer3.png"
-          alt=""
-          className="absolute bottom-0 left-80 w-40"
-        /> */}
-        <div className="text-center">
-          <p className="text-xl md:text-3xl mb-2.5">COUNTDOWN</p>
-          <div className="text-5xl md:text-7xl mb-2.5">
+      <div className="relative bg-[url('/images/countDownTimerBg.jpg')] bg-[0%_50%] shadow-inner bg-no-repeat bg-cover overflow-x-hidden overflow-y-hidden">
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          viewport={{ once: false, amount: 0.5 }}
+          className="absolute bottom-0 left-0 w-52 lg:w-72"
+        >
+          <Image
+            src="/images/countDownTimerLayer1.png"
+            width={0}
+            height={0}
+            sizes="100vw"
+            alt=""
+            className="absolute bottom-0 left-0 w-52 lg:w-72 z-10 opacity-50"
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          viewport={{ once: false, amount: 0.5 }}
+          className="absolute top-0 right-0 w-52 lg:w-72"
+        >
+          <Image
+            src="/images/countDownTimerLayer2.png"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="absolute top-0 right-0 w-52 lg:w-72 z-10 opacity-50"
+            alt=""
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          viewport={{ once: false, amount: 0.5 }}
+          className="relative text-center z-20"
+        >
+          <p className="text-xl lg:text-3xl mb-2.5">COUNTDOWN</p>
+          <div className="text-5xl lg:text-7xl mb-2.5">
             <p>{timeLeft.days}</p>
             <p>DAYS</p>
           </div>
-        </div>
-        <div className="flex justify-center gap-12">
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          viewport={{ once: false, amount: 0.2 }}
+          className="flex justify-center gap-12 relative z-20"
+        >
           <div className="text-center">
-            <p className="text-3xl md:text-5xl">{timeLeft.hours}</p>
+            <p className="text-3xl lg:text-5xl">{timeLeft.hours}</p>
             <p>HOURS</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl md:text-5xl">{timeLeft.minutes}</p>
+            <p className="text-3xl lg:text-5xl">{timeLeft.minutes}</p>
             <p>MINUTES</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl md:text-5xl">{timeLeft.seconds}</p>
+            <p className="text-3xl lg:text-5xl">{timeLeft.seconds}</p>
             <p>SECONDS</p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );

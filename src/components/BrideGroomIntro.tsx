@@ -1,15 +1,27 @@
+import Image from "next/image";
+
 export default function BrigeGroomIntoro() {
   return (
     <>
       <div className="relative max-w-prose mx-auto text-black">
-        <img src="/images/brigeGroomIntoroLayer2.png" alt="" className="" />
-        <div className="rounded-2xl shadow-lg bg-[url('/images/brigeGroomIntoro.jpg')] bg-cover bg-center p-8 mb-10 max-w-prose md:mx-auto mx-2.5">
-          <img
+        <Image
+          src="/images/brigeGroomIntoroLayer2.png"
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="w-full h-auto"
+          alt=""
+        />
+        <div className="rounded-2xl shadow-lg bg-[url('/images/brigeGroomIntoro.jpg')] bg-cover bg-center px-4 py-14 mb-10 max-w-prose lg:mx-auto mx-2.5">
+          <Image
             src="/images/brigeGroomIntoroLayer.png"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="mx-auto w-24 lg:w-50 mb-10"
             alt=""
-            className="mx-auto w-24 md:w-50 mb-10"
           />
-          <div className="text-center space-y-5 md:space-y-10">
+          <div className="text-center space-y-5 lg:space-y-10">
             <div>
               <p>
                 皆さまいかがお過ごしでしょうか

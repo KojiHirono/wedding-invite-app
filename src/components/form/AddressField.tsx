@@ -46,7 +46,7 @@ const AddressField: React.FC<Props> = ({
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-2 md:items-center">
+      <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
         <FormLabel label="郵便番号" hint="postalCode" required />
         <input
           type="text"
@@ -57,7 +57,7 @@ const AddressField: React.FC<Props> = ({
         />
         {error && <p>{error}</p>}
       </div>
-      <div className="flex flex-col md:flex-row gap-2 md:items-center">
+      <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
         <FormLabel label="住所" hint="Address" required />
         <input
           type="text"
@@ -67,7 +67,7 @@ const AddressField: React.FC<Props> = ({
           className="bg-white p-2 flex-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
         />
       </div>
-      <div className="flex flex-col md:flex-row gap-2 md:items-center">
+      <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
         <FormLabel label="建物名" hint="building" required={false} />
         <input
           type="text"
