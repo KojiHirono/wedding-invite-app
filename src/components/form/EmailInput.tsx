@@ -56,7 +56,7 @@ const EmailInput: React.FC<Props> = ({ control, errors }) => {
                         className={inputClassEmail}
                       />
                     </div>
-                    <div>
+                    <div className="flex flex-1">
                       <select
                         value={domainField.value}
                         onChange={domainField.onChange}

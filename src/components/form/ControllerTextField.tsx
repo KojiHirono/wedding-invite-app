@@ -32,7 +32,7 @@ const ControllerTextField: React.FC<Props> = ({
               isFlexHarf ? "flex-[1/2]" : "flex-1"
             }`
           : `bg-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 ${
-              isFlexHarf ? "flex-[1/2]" : "flex-1"
+              isFlexHarf ? "flex-[1/2] " : "flex-1"
             }`;
         return (
           <div className="flex w-full flex-col">

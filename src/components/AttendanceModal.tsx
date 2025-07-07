@@ -227,7 +227,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="名前" hint="Name" required />
                 <div className="flex w-full flex-col">
-                  <div className="flex gap-2 w-full">
+                  <div className="flex gap-2 w-full flex-col md:flex-row">
                     <ControllerTextField
                       name="lastName"
                       control={control}
@@ -251,7 +251,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="かな" hint="Kana" required />
                 <div className="flex w-full flex-col">
-                  <div className="flex gap-2 w-full">
+                  <div className="flex gap-2 w-full flex-col md:flex-row">
                     <ControllerTextField
                       name="lastNameKana"
                       control={control}
@@ -276,7 +276,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="ローマ字" hint="Latin Alphabet" required />
                 <div className="flex w-full flex-col">
-                  <div className="flex gap-2 w-full">
+                  <div className="flex gap-2 w-full flex-col md:flex-row">
                     <ControllerTextField
                       name="lastNameRomaji"
                       control={control}
