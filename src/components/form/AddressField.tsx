@@ -1,24 +1,30 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import {
+  useWatch,
+  Control,
+  FieldErrors,
+  UseFormSetValue,
+  UseFormSetError,
+} from "react-hook-form";
 import FormLabel from "./FormLabel";
+import { AttendanceForm } from "../AttendanceModal";
+import ControllerTextField from "./ControllerTextField";
 
 type Props = {
-  postalCode: string;
-  setPostalCode: (postalCode: string) => void;
-  address: string;
-  setAddress: (address: string) => void;
-  building: string;
-  setBuilding: (building: string) => void;
+  control: Control<AttendanceForm>;
+  errors?: FieldErrors<AttendanceForm>;
+  setValue: UseFormSetValue<AttendanceForm>;
+  setError: UseFormSetError<AttendanceForm>;
 };
 
 const AddressField: React.FC<Props> = ({
-  postalCode,
-  setPostalCode,
-  address,
-  setAddress,
-  building,
-  setBuilding,
+  control,
+  errors,
+  setValue,
+  setError,
 }) => {
-  const [error, setError] = useState("");
+  const postalCode = useWatch({ control, name: "postalCode" });
+  // const [fetchError, setFetchError] = useState("");
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -26,55 +32,69 @@ const AddressField: React.FC<Props> = ({
         `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalCode}`,
       );
       const data = await res.json();
+
       if (data.results) {
         const { address1, address2, address3 } = data.results[0];
-        setAddress(`${address1}${address2}${address3}`);
-        setError("");
+        const fullAddress = `${address1}${address2}${address3}`;
+        setValue("address", fullAddress);
       } else {
-        setError("住所が見つかりませんでした");
-        setAddress("");
+        setValue("address", "");
+        setError("postalCode", {
+          type: "manual",
+          message: "住所が見つかりませんでした",
+        });
       }
     };
 
-    if (postalCode.length === 7) {
+    if (postalCode?.length === 7) {
       fetchAddress();
-    } else {
-      setAddress("");
-      setError("");
     }
-  }, [postalCode]);
+  }, [postalCode, setValue, setError]);
 
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
         <FormLabel label="郵便番号" hint="postalCode" required />
-        <input
-          type="text"
-          value={postalCode}
-          onChange={(e) => setPostalCode(e.target.value)}
-          placeholder="1000001"
-          className="bg-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
-        />
-        {error && <p>{error}</p>}
+        <div className="flex w-full flex-col">
+          <div className="flex gap-2 w-full">
+            <ControllerTextField
+              name="postalCode"
+              control={control}
+              errors={errors}
+              placeholder="1000001"
+              isFlexHarf
+            />
+          </div>
+          {errors?.postalCode && (
+            <p className="text-red-500 text-left">
+              {errors.postalCode?.message}
+            </p>
+          )}
+        </div>
       </div>
       <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
         <FormLabel label="住所" hint="Address" required />
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="東京都××区×× 1-1-1"
-          className="bg-white p-2 flex-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
-        />
+        <div className="flex w-full flex-col">
+          <div className="flex gap-2 w-full">
+            <ControllerTextField
+              name="address"
+              control={control}
+              errors={errors}
+              placeholder="東京都××区×× 1-1-1"
+            />
+          </div>
+          {errors?.address && (
+            <p className="text-red-500 text-left">{errors.address?.message}</p>
+          )}
+        </div>
       </div>
       <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
         <FormLabel label="建物名" hint="building" required={false} />
-        <input
-          type="text"
-          value={building}
-          onChange={(e) => setBuilding(e.target.value)}
+        <ControllerTextField
+          name="building"
+          control={control}
+          errors={errors}
           placeholder="××マンション 101号室"
-          className="bg-white p-2 flex-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200"
         />
       </div>
     </>

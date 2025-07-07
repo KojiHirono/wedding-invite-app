@@ -1,92 +1,104 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { RadioGroup } from "./form/RadioGroup";
-import TextField from "./form/TextField";
-import TextArea from "./form/TextArea";
 import FormLabel from "./form/FormLabel";
 import EmailInput from "./form/EmailInput";
 import AddressField from "./form/AddressField";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ControllerTextField from "./form/ControllerTextField";
+
+const ATTENDANCE = {
+  ATTENDING: "1",
+  ABSENT: "2",
+} as const;
+
+const GUEST_CATEGORY = {
+  GROOM: "1",
+  BRIDE: "2",
+} as const;
+
+const FLG = {
+  TRUE: "1",
+  FALES: "0",
+} as const;
+
+const schema = z.object({
+  attendance: z.enum([ATTENDANCE.ATTENDING, ATTENDANCE.ABSENT]),
+  guestCategory: z.enum([GUEST_CATEGORY.GROOM, GUEST_CATEGORY.BRIDE]),
+  lastName: z.string().min(1, "名前を入力してください"),
+  firstName: z.string().min(1, "名前を入力してください"),
+  lastNameKana: z.string().min(1, "名前を入力してください"),
+  firstNameKana: z.string().min(1, "名前を入力してください"),
+  lastNameRomaji: z.string().min(1, "名前を入力してください"),
+  firstNameRomaji: z.string().min(1, "名前を入力してください"),
+  email: z.string().min(1, "メールアドレスを入力してください"),
+  phone: z.string().min(1, "電話番号を入力してください"),
+  domain: z.string().min(1, "ドメインを選択してください"),
+  postalCode: z.string().min(1, "郵便番号を入力してください"),
+  address: z.string().min(1, "住所を入力してください"),
+  building: z.string().optional(),
+  allergy: z.string().optional(),
+  dogAllegy: z.enum([FLG.TRUE, FLG.FALES]),
+  message: z.string().optional(),
+});
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-type AttendanceForm = {
-  attendance: string;
-  guestCategory: string;
-  lastName: string;
-  firstName: string;
-  lastKana: string;
-  firstKana: string;
-  lastAlphabet: string;
-  firstAlphabet: string;
-  email: string;
-  domain: string;
-  postalCode: string;
-  address: string;
-  building: string;
-  dietaryRestrictions: string;
-  allergy: string;
-  dogAllegy: string;
-  message: string;
-};
+export type AttendanceForm = z.infer<typeof schema>;
 
 const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
-  const [attendance, setAttendance] = useState("attending");
-  const [guestCategory, setGuestCategory] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastKana, setLastKana] = useState("");
-  const [firstKana, setFirstKana] = useState("");
-  const [lastAlphabet, setLastAlphabet] = useState("");
-  const [firstAlphabet, setFirstAlphabet] = useState("");
-  const [email, setEmail] = useState("");
-  const [domain, setDomain] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [address, setAddress] = useState("");
-  const [building, setBuilding] = useState("");
-  const [dietaryRestrictions, setDietaryRestrictions] = useState("");
-  const [allergy, setAllergy] = useState("");
-  const [dogAllegy, setDogAllegy] = useState("");
-  const [message, setMessage] = useState("");
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<AttendanceForm>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      attendance: ATTENDANCE.ATTENDING,
+      guestCategory: GUEST_CATEGORY.GROOM,
+      lastName: "",
+      firstName: "",
+      lastNameKana: "",
+      firstNameKana: "",
+      lastNameRomaji: "",
+      firstNameRomaji: "",
+      email: "",
+      phone: "",
+      domain: "@gmail.com",
+      postalCode: "",
+      address: "",
+      building: "",
+      allergy: "",
+      dogAllegy: FLG.FALES,
+      message: "",
+    },
+    mode: "onSubmit",
+    // reValidateMode: "onSubmit",
+  });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData: AttendanceForm = {
-      attendance,
-      guestCategory,
-      lastName,
-      firstName,
-      lastKana,
-      firstKana,
-      lastAlphabet,
-      firstAlphabet,
-      email,
-      domain,
-      postalCode,
-      address,
-      building,
-      dietaryRestrictions,
-      allergy,
-      dogAllegy,
-      message,
-    };
-
+  const onSubmit = async (data: AttendanceForm) => {
     try {
       const res = await fetch("http://localhost:8080/api/weddingInvite", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
       if (res.ok) {
         onClose();
       } else {
-        alert("送信失敗。。。");
+        alert("送信に失敗しました。");
       }
     } catch (error) {
       console.error("エラー：", error);
@@ -106,17 +118,19 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  const showSpeech = attendance === "absent";
+  const attendance = watch("attendance");
+  const showSpeech = attendance === ATTENDANCE.ABSENT;
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          noValidate
         >
           <motion.div
             className="bg-[url('/images/brigeGroomIntoro.jpg')] rounded-2xl shadow-lg w-full lg:max-w-3xl relative max-h-[90vh] overflow-hidden m-2.5"
@@ -156,15 +170,24 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                     )}
                   </AnimatePresence>
                 </div>
-                <RadioGroup
+                <Controller
                   name="attendance"
-                  value={attendance}
-                  onChange={setAttendance}
-                  options={[
-                    { label: "ご出席", value: "attending" },
-                    { label: "ご欠席", value: "absent" },
-                  ]}
-                  className="py-10"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <RadioGroup
+                        name="attendance"
+                        value={field.value}
+                        onChange={field.onChange}
+                        options={[
+                          { label: "ご出席", value: ATTENDANCE.ATTENDING },
+                          { label: "ご欠席", value: ATTENDANCE.ABSENT },
+                        ]}
+                        className="py-10"
+                      />
+                      {errors.attendance && <p>{errors.attendance.message}</p>}
+                    </>
+                  )}
                 />
               </div>
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
@@ -173,60 +196,107 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   hint="Guest Category"
                   required
                 />
-                <RadioGroup
+                <Controller
                   name="guestCategory"
-                  value={guestCategory}
-                  onChange={setGuestCategory}
-                  options={[
-                    { label: "新郎側ゲスト", value: "groom" },
-                    { label: "新婦側ゲスト", value: "brige" },
-                  ]}
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <RadioGroup
+                        name="guestCategory"
+                        value={field.value}
+                        onChange={field.onChange}
+                        options={[
+                          {
+                            label: "新郎側ゲスト",
+                            value: GUEST_CATEGORY.GROOM,
+                          },
+                          {
+                            label: "新婦側ゲスト",
+                            value: GUEST_CATEGORY.BRIDE,
+                          },
+                        ]}
+                      />
+                      {errors.guestCategory && (
+                        <p>{errors.guestCategory.message}</p>
+                      )}
+                    </>
+                  )}
                 />
               </div>
+
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="名前" hint="Name" required />
-                <TextField
-                  name="lastName"
-                  placeholder="湯"
-                  value={lastName}
-                  onChange={setLastName}
-                />
-                <TextField
-                  name="firstName"
-                  placeholder="婆婆"
-                  value={firstName}
-                  onChange={setFirstName}
-                />
+                <div className="flex w-full flex-col">
+                  <div className="flex gap-2 w-full">
+                    <ControllerTextField
+                      name="lastName"
+                      control={control}
+                      errors={errors}
+                      placeholder="湯"
+                    />
+                    <ControllerTextField
+                      name="firstName"
+                      control={control}
+                      errors={errors}
+                      placeholder="婆婆"
+                    />
+                  </div>
+                  {(errors?.lastName || errors?.firstName) && (
+                    <p className="text-red-500 text-left">
+                      {errors.lastName?.message || errors.firstName?.message}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="かな" hint="Kana" required />
-                <TextField
-                  name="lastKana"
-                  placeholder="ゆ"
-                  value={lastKana}
-                  onChange={setLastKana}
-                />
-                <TextField
-                  name="firstKana"
-                  placeholder="ばーば"
-                  value={firstKana}
-                  onChange={setFirstKana}
-                />
+                <div className="flex w-full flex-col">
+                  <div className="flex gap-2 w-full">
+                    <ControllerTextField
+                      name="lastNameKana"
+                      control={control}
+                      errors={errors}
+                      placeholder="ゆ"
+                    />
+                    <ControllerTextField
+                      name="firstNameKana"
+                      control={control}
+                      errors={errors}
+                      placeholder="ばーば"
+                    />
+                  </div>
+                  {(errors?.lastNameKana || errors?.firstNameKana) && (
+                    <p className="text-red-500 text-left">
+                      {errors.lastNameKana?.message ||
+                        errors.firstNameKana?.message}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="ローマ字" hint="Latin Alphabet" required />
-                <TextField
-                  name="lastAlphabet"
-                  placeholder="yu"
-                  value={lastAlphabet}
-                  onChange={setLastAlphabet}
-                />
-                <TextField
-                  name="firstAlphabet"
-                  placeholder="ba-ba"
-                  value={firstAlphabet}
-                  onChange={setFirstAlphabet}
-                />
+                <div className="flex w-full flex-col">
+                  <div className="flex gap-2 w-full">
+                    <ControllerTextField
+                      name="lastNameRomaji"
+                      control={control}
+                      errors={errors}
+                      placeholder="yu"
+                    />
+                    <ControllerTextField
+                      name="firstNameRomaji"
+                      control={control}
+                      errors={errors}
+                      placeholder="ba-ba"
+                    />
+                  </div>
+                  {(errors?.lastNameRomaji || errors?.firstNameRomaji) && (
+                    <p className="text-red-500 text-left">
+                      {errors.lastNameRomaji?.message ||
+                        errors.firstNameRomaji?.message}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel
@@ -234,65 +304,62 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   hint="Email Address"
                   required
                 />
-                <EmailInput
-                  email={email}
-                  setEmail={setEmail}
-                  domain={domain}
-                  setDomain={setDomain}
+                <EmailInput control={control} errors={errors} />
+              </div>
+              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+                <FormLabel label="電話番号" hint="Phone" required={false} />
+                <ControllerTextField
+                  name="phone"
+                  control={control}
+                  errors={errors}
+                  placeholder="08012345678"
                 />
               </div>
               <AddressField
-                postalCode={postalCode}
-                setPostalCode={setPostalCode}
-                address={address}
-                setAddress={setAddress}
-                building={building}
-                setBuilding={setBuilding}
+                control={control}
+                errors={errors}
+                setValue={setValue}
+                setError={setError}
               />
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
-                <FormLabel
-                  label="食事制限"
-                  hint="Dietary Restrictions"
-                  required
-                />
-                <RadioGroup
-                  name="dietaryRestrictions"
-                  value={dietaryRestrictions}
-                  onChange={setDietaryRestrictions}
-                  options={[
-                    { label: "あ　り", value: "with" },
-                    { label: "な　し", value: "without" },
-                  ]}
-                />
-              </div>
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="アレルギー" hint="Allergy" required={false} />
-                <TextArea
+                <ControllerTextField
                   name="allergy"
-                  value={allergy}
-                  onChange={setAllergy}
+                  control={control}
+                  errors={errors}
                   placeholder="えび　かに　そば　卵　乳　どんぐり　etc."
+                  isTextArea
                 />
               </div>
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="犬アレルギー" hint="Dog Allegy" required />
-                <RadioGroup
+                <Controller
                   name="dogAllegy"
-                  value={dogAllegy}
-                  onChange={setDogAllegy}
-                  options={[
-                    { label: "あ　り", value: "with" },
-                    { label: "な　し", value: "without" },
-                  ]}
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <RadioGroup
+                        name="dogAllegy"
+                        value={field.value}
+                        onChange={field.onChange}
+                        options={[
+                          { label: "あ　り", value: FLG.TRUE },
+                          { label: "な　し", value: FLG.FALES },
+                        ]}
+                      />
+                      {errors.dogAllegy && <p>{errors.dogAllegy?.message}</p>}
+                    </>
+                  )}
                 />
               </div>
               <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
                 <FormLabel label="メッセージ" hint="Message" required={false} />
-                <TextArea
+                <ControllerTextField
                   name="message"
-                  value={message}
-                  onChange={setMessage}
+                  control={control}
+                  errors={errors}
                   placeholder="ご自由にご入力ください"
+                  isTextArea
                 />
               </div>
               <button

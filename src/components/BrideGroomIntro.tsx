@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function BrigeGroomIntoro() {
   return (
     <>
-      <div className="relative max-w-prose mx-auto text-black">
+      <div className="relative max-w-prose mx-auto text-black h-screen">
         <Image
           src="/images/brigeGroomIntoroLayer2.png"
           width={0}
