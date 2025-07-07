@@ -1,6 +1,3 @@
-// pages/index.js (または任意のページ)
-// import { useEffect, useState } from "react";
-
 import AccessMap from "@/components/AccessMap";
 import BrigeGroomIntoro from "@/components/BrideGroomIntro";
 import CountdownTimer from "@/components/CountdownTimer";
@@ -37,23 +34,4 @@ export default function Home() {
       </main>
     </>
   );
-
-  // const [greeting, setGreeting] = useState("");
-
-  // useEffect(() => {
-  //   // バックエンドのエンドポイントにGETリクエストを送る
-  //   fetch("http://localhost:8080/api/weddingInvite", {
-  //     method: "GET",
-  //     credentials: "include", // 認証情報（クッキー）を送信
-  //   })
-  //     .then((response) => response.text())
-  //     .then((data) => setGreeting(data))
-  //     .catch((error) => console.error("Error fetching data:", error));
-  // }, []);
-
-  // return (
-  //   <div>
-  //     <h1>{greeting}</h1>
-  //   </div>
-  // );
 }
