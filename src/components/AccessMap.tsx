@@ -23,11 +23,11 @@ export default function AccessMap() {
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        viewport={{ once: false, amount: 0.2 }}
-        className="relative rounded-2xl bg-[url('/images/countDownTimerBg.jpg')] bg-[0%_50%] bg-no-repeat bg-cover mx-2.5 lg:mx-auto lg:w-3xl p-10 lg:p-20 text-center"
+        viewport={{ once: true, amount: 0.2 }}
+        className="relative rounded-2xl bg-[url('/images/countDownTimerBg.jpg')] bg-[0%_50%] bg-no-repeat bg-cover mx-2.5 md:mx-10 p-10 md:p-20 text-center"
       >
-        <p className="mb-5 lg:mb-14 font-bold text-xl">アコールハーブ</p>
-        <div className="lg:space-y-2 mb-7">
+        <p className="mb-5 md:mb-14 font-bold text-xl">アコールハーブ</p>
+        <div className="md:space-y-2 mb-7">
           <p>www.accord-herbe.jp</p>
           <p>〒274-0060千葉県船橋市坪井東1丁目1-11</p>
           <p>047-461-5550</p>
@@ -46,9 +46,9 @@ export default function AccessMap() {
             </GoogleMap>
           </LoadScript>
         </div>
-        <div className="mb-12 lg:mb-14 lg:space-y-2">
+        <div className="mb-12 md:mb-14 md:space-y-2">
           <p>お手数ではございますが</p>
-          <p>8月10日までにご返信くださいますよう</p>
+          <p>8月8日までにご返信くださいますよう</p>
           <p>お願い申し上げます</p>
         </div>
         <motion.button
@@ -70,7 +70,7 @@ export default function AccessMap() {
           width={0}
           height={0}
           sizes="100vw"
-          className="absolute bottom-0 left-0 w-24 lg:w-40"
+          className="absolute bottom-0 left-0 w-24 md:w-40"
           alt=""
         />
       </motion.div>

@@ -53,7 +53,7 @@ const AddressField: React.FC<Props> = ({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+      <div className="flex flex-col md:flex-row gap-2 md:items-center">
         <FormLabel label="郵便番号" hint="postalCode" required />
         <div className="flex w-full flex-col">
           <div className="flex gap-2 w-full">
@@ -72,7 +72,7 @@ const AddressField: React.FC<Props> = ({
           )}
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+      <div className="flex flex-col md:flex-row gap-2 md:items-center">
         <FormLabel label="住所" hint="Address" required />
         <div className="flex w-full flex-col">
           <div className="flex gap-2 w-full">
@@ -88,7 +88,7 @@ const AddressField: React.FC<Props> = ({
           )}
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+      <div className="flex flex-col md:flex-row gap-2 md:items-center">
         <FormLabel label="建物名" hint="building" required={false} />
         <ControllerTextField
           name="building"

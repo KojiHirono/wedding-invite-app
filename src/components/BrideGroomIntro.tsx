@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function BrigeGroomIntoro() {
   return (
     <>
-      <div className="relative max-w-prose mx-auto text-black h-screen">
+      <div className="relative mx-2.5 md:mx-10 text-black">
         <Image
           src="/images/brigeGroomIntoroLayer2.png"
           width={0}
@@ -12,16 +12,16 @@ export default function BrigeGroomIntoro() {
           className="w-full h-auto"
           alt=""
         />
-        <div className="rounded-2xl shadow-lg bg-[url('/images/brigeGroomIntoro.jpg')] bg-cover bg-center px-4 py-14 mb-10 max-w-prose lg:mx-auto mx-2.5">
+        <div className="rounded-2xl shadow-2xl bg-[url('/images/brigeGroomIntoro.jpg')] bg-cover bg-center px-2 py-14 mb-10 mx-2.5 md:mx-auto">
           <Image
             src="/images/brigeGroomIntoroLayer.png"
             width={0}
             height={0}
             sizes="100vw"
-            className="mx-auto w-24 lg:w-50 mb-10"
+            className="mx-auto w-24 md:w-50 mb-10"
             alt=""
           />
-          <div className="text-center space-y-5 lg:space-y-10">
+          <div className="text-center space-y-5 md:space-y-10">
             <div>
               <p>
                 皆さまいかがお過ごしでしょうか
@@ -40,7 +40,7 @@ export default function BrigeGroomIntoro() {
             </div>
             <div>
               <p>敬具</p>
-              <p>令和〇年〇月吉日</p>
+              <p>令和7年7月吉日</p>
             </div>
             <div>
               <p>廣野　晃司</p>

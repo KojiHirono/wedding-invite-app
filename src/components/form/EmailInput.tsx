@@ -41,7 +41,7 @@ const EmailInput: React.FC<Props> = ({ control, errors }) => {
             return (
               <>
                 <div className="flex flex-col justify-start w-full">
-                  <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+                  <div className="flex flex-col md:flex-row gap-2 md:items-center">
                     <div className="flex flex-col justify-start w-full">
                       <input
                         type="text"

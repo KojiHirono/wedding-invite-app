@@ -87,13 +87,16 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const onSubmit = async (data: AttendanceForm) => {
     try {
-      const res = await fetch("http://localhost:8080/api/weddingInvite", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://wedding-invite-backed-production.up.railway.app/api/weddingInvite",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      });
+      );
 
       if (res.ok) {
         onClose();
@@ -133,7 +136,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
           noValidate
         >
           <motion.div
-            className="bg-[url('/images/brigeGroomIntoro.jpg')] rounded-2xl shadow-lg w-full lg:max-w-3xl relative max-h-[90vh] overflow-hidden m-2.5"
+            className="bg-[url('/images/brigeGroomIntoro.jpg')] rounded-2xl shadow-lg w-full md:max-w-3xl relative max-h-[90vh] overflow-hidden m-2.5"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 50, opacity: 0 }}
@@ -190,7 +193,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 />
               </div>
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel
                   label="ゲストカテゴリー"
                   hint="Guest Category"
@@ -224,7 +227,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 />
               </div>
 
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel label="名前" hint="Name" required />
                 <div className="flex w-full flex-col">
                   <div className="flex gap-2 w-full flex-col md:flex-row">
@@ -248,7 +251,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel label="かな" hint="Kana" required />
                 <div className="flex w-full flex-col">
                   <div className="flex gap-2 w-full flex-col md:flex-row">
@@ -273,7 +276,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel label="ローマ字" hint="Latin Alphabet" required />
                 <div className="flex w-full flex-col">
                   <div className="flex gap-2 w-full flex-col md:flex-row">
@@ -298,7 +301,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel
                   label="メールアドレス"
                   hint="Email Address"
@@ -306,7 +309,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 />
                 <EmailInput control={control} errors={errors} />
               </div>
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel label="電話番号" hint="Phone" required={false} />
                 <ControllerTextField
                   name="phone"
@@ -314,6 +317,11 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   errors={errors}
                   placeholder="08012345678"
                 />
+                {errors?.phone && (
+                  <p className="text-red-500 text-left">
+                    {errors.phone?.message}
+                  </p>
+                )}
               </div>
               <AddressField
                 control={control}
@@ -321,7 +329,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 setValue={setValue}
                 setError={setError}
               />
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel label="アレルギー" hint="Allergy" required={false} />
                 <ControllerTextField
                   name="allergy"
@@ -331,7 +339,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   isTextArea
                 />
               </div>
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel label="犬アレルギー" hint="Dog Allegy" required />
                 <Controller
                   name="dogAllegy"
@@ -352,7 +360,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 />
               </div>
-              <div className="flex flex-col lg:flex-row gap-2 lg:items-center">
+              <div className="flex flex-col md:flex-row gap-2 md:items-center">
                 <FormLabel label="メッセージ" hint="Message" required={false} />
                 <ControllerTextField
                   name="message"

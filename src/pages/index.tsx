@@ -2,12 +2,14 @@ import AccessMap from "@/components/AccessMap";
 import BrigeGroomIntoro from "@/components/BrideGroomIntro";
 import CountdownTimer from "@/components/CountdownTimer";
 import GreetingSection from "@/components/GreetingSection";
+import InvitationCover from "@/components/InvitationCover";
 import Image from "next/image";
 
 export default function Home() {
   return (
     <>
       <main>
+        <InvitationCover />
         <BrigeGroomIntoro />
         <CountdownTimer />
         <div className="relative bg-gradient-to-b from-[#739A94]/50 to-[#1B391C] py-12">
