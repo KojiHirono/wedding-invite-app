@@ -11,19 +11,23 @@ type TimeLeft = {
 
 const CountdownTimer = () => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
-  // const ref = useRef(null);
-  // const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  // 2025年10月10日12:00までのカウントダウン
   useEffect(() => {
     const calculateTimeLeft = (): TimeLeft => {
+      // 目標日時
       const targetDate = new Date("2025-10-10T12:00:00");
+      // 現在日時
       const now = new Date();
+      // 合計残り時間（ミリ秒）
       const diff = targetDate.getTime() - now.getTime();
 
+      // 目標日時を過ぎた場合、全て「０」に設定
       if (diff <= 0) {
         return { days: 0, hours: 0, minutes: 0, seconds: 0 };
       }
 
+      // 日・時間・分・秒に変換
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
@@ -32,6 +36,7 @@ const CountdownTimer = () => {
       return { days, hours, minutes, seconds };
     };
 
+    // 毎秒時間を更新
     setTimeLeft(calculateTimeLeft());
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
@@ -40,7 +45,7 @@ const CountdownTimer = () => {
     return () => clearInterval(timer);
   }, []);
 
-  if (!timeLeft) return null; // 初回のサーバーレンダリングでは描画しない
+  if (!timeLeft) return null;
 
   return (
     <>

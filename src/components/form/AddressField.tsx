@@ -24,7 +24,6 @@ const AddressField: React.FC<Props> = ({
   setError,
 }) => {
   const postalCode = useWatch({ control, name: "postalCode" });
-  // const [fetchError, setFetchError] = useState("");
 
   useEffect(() => {
     const fetchAddress = async () => {

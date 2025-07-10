@@ -1,9 +1,16 @@
 import Image from "next/image";
+import { motion } from "framer-motion";
 
-export default function BrigeGroomIntoro() {
+const BrideGroomIntro = () => {
   return (
     <>
-      <div className="relative mx-2.5 md:mx-10 text-black">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.5 }}
+        className="relative mx-2.5 md:mx-10 text-black"
+      >
         <Image
           src="/images/brigeGroomIntoroLayer2.png"
           width={0}
@@ -48,7 +55,9 @@ export default function BrigeGroomIntoro() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
-}
+};
+
+export default BrideGroomIntro;

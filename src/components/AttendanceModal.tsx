@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RadioGroup } from "./form/RadioGroup";
 import FormLabel from "./form/FormLabel";
 import EmailInput from "./form/EmailInput";
@@ -10,55 +10,154 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ControllerTextField from "./form/ControllerTextField";
 
+// 出席ステータス
 const ATTENDANCE = {
   ATTENDING: "1",
   ABSENT: "2",
 } as const;
 
+// ゲストカテゴリー
 const GUEST_CATEGORY = {
   GROOM: "1",
   BRIDE: "2",
 } as const;
 
+// フラグ
 const FLG = {
   TRUE: "1",
-  FALES: "0",
+  FALSE: "0",
 } as const;
 
-const schema = z.object({
-  attendance: z.enum([ATTENDANCE.ATTENDING, ATTENDANCE.ABSENT]),
-  guestCategory: z.enum([GUEST_CATEGORY.GROOM, GUEST_CATEGORY.BRIDE]),
-  lastName: z.string().min(1, "名前を入力してください"),
-  firstName: z.string().min(1, "名前を入力してください"),
-  lastNameKana: z.string().min(1, "名前を入力してください"),
-  firstNameKana: z.string().min(1, "名前を入力してください"),
-  lastNameRomaji: z.string().min(1, "名前を入力してください"),
-  firstNameRomaji: z.string().min(1, "名前を入力してください"),
-  email: z.string().min(1, "メールアドレスを入力してください"),
-  phone: z.string().min(1, "電話番号を入力してください"),
-  domain: z.string().min(1, "ドメインを選択してください"),
-  postalCode: z.string().min(1, "郵便番号を入力してください"),
-  address: z.string().min(1, "住所を入力してください"),
-  building: z.string().optional(),
-  allergy: z.string().optional(),
-  dogAllegy: z.enum([FLG.TRUE, FLG.FALES]),
-  message: z.string().optional(),
-});
+const MESSAGE = {
+  NAME_REQUIRED: "お名前を入力してください",
+  EMAIL_REQUIRED: "メールアドレスを入力してください",
+  PHONE_REQUIRED: "電話番号を入力してください",
+  POSTALCODE_REQUIRED: "郵便番号を入力してください",
+  ADDRESS_REQUIRED: "住所を入力してください",
+  MAX_TEXT_LENGTH_EXCEEDED: "文字以内で入力してください",
+  NAME_KANA_INVALID_FORMAT: "ひらがなで入力してください",
+  NAME_ROMAJI_INVALID_FORMAT: "ローマ字で入力してください",
+} as const;
+
+// Zodスキーマ（バリデーション）
+const schema = z
+  .object({
+    attendance: z.enum([ATTENDANCE.ATTENDING, ATTENDANCE.ABSENT]),
+    guestCategory: z.enum([GUEST_CATEGORY.GROOM, GUEST_CATEGORY.BRIDE]),
+    lastName: z
+      .string()
+      .min(1, MESSAGE.NAME_REQUIRED)
+      .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED),
+    firstName: z
+      .string()
+      .min(1, MESSAGE.NAME_REQUIRED)
+      .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED),
+    lastNameKana: z
+      .string()
+      .min(1, MESSAGE.NAME_REQUIRED)
+      .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
+      .regex(/^[ぁ-んー　]+$/, MESSAGE.NAME_KANA_INVALID_FORMAT),
+    firstNameKana: z
+      .string()
+      .min(1, MESSAGE.NAME_REQUIRED)
+      .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
+      .regex(/^[ぁ-んー　]+$/, MESSAGE.NAME_KANA_INVALID_FORMAT),
+    lastNameRomaji: z
+      .string()
+      .min(1, MESSAGE.NAME_REQUIRED)
+      .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
+      .regex(/^[A-Za-z\s'-]+$/, MESSAGE.NAME_ROMAJI_INVALID_FORMAT),
+    firstNameRomaji: z
+      .string()
+      .min(1, MESSAGE.NAME_REQUIRED)
+      .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
+      .regex(/^[A-Za-z\s'-]+$/, MESSAGE.NAME_ROMAJI_INVALID_FORMAT),
+    email: z.string().min(1, MESSAGE.EMAIL_REQUIRED),
+    domain: z.string().min(1, MESSAGE.NAME_REQUIRED),
+    phone: z
+      .string()
+      .min(1, MESSAGE.PHONE_REQUIRED)
+      .regex(/^\d{10,11}$/, "10桁または11桁の数字で入力してください"),
+    postalCode: z
+      .string()
+      .min(1, MESSAGE.POSTALCODE_REQUIRED)
+      .regex(/^\d{7}$/, "ハイフンなし7桁の数字で入力してください"),
+    address: z
+      .string()
+      .min(1, MESSAGE.ADDRESS_REQUIRED)
+      .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED),
+    building: z
+      .string()
+      .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
+      .optional(),
+    allergy: z
+      .string()
+      .max(125, "125" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
+      .optional(),
+    dogAllegy: z.enum([FLG.TRUE, FLG.FALSE]),
+    message: z
+      .string()
+      .max(125, "125" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.domain === "その他") {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "有効なメールアドレスを入力してください",
+          path: ["email"],
+        });
+      }
+      if (data.email.length > 100) {
+        ctx.addIssue({
+          code: "too_big",
+          maximum: 100,
+          inclusive: true,
+          type: "string",
+          message: "半角100" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED,
+          path: ["email"],
+        });
+      }
+    } else {
+      const totalLength = data.email.length + data.domain.length;
+      if (!/^[^\s@]+$/.test(data.email)) {
+        ctx.addIssue({
+          code: "custom",
+          message: "メールIDには@を含めないでください",
+          path: ["email"],
+        });
+      }
+      if (totalLength > 100) {
+        ctx.addIssue({
+          code: "too_big",
+          maximum: 100,
+          inclusive: true,
+          type: "string",
+          message: "ドメイン込みで半角100" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED,
+          path: ["email"],
+        });
+      }
+    }
+  });
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
+// フォーム型定義
 export type AttendanceForm = z.infer<typeof schema>;
 
 const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
+  // フォーム管理
   const {
     control,
     handleSubmit,
     watch,
     setValue,
     setError,
+    reset,
     formState: { errors },
   } = useForm<AttendanceForm>({
     resolver: zodResolver(schema),
@@ -78,14 +177,24 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
       address: "",
       building: "",
       allergy: "",
-      dogAllegy: FLG.FALES,
+      dogAllegy: FLG.FALSE,
       message: "",
     },
     mode: "onSubmit",
-    // reValidateMode: "onSubmit",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // データ送信
   const onSubmit = async (data: AttendanceForm) => {
+    const fullEmail =
+      data.domain === "その他" ? data.email : `${data.email}${data.domain}`;
+    const payload = {
+      ...data,
+      email: fullEmail,
+    };
+    // 送信中
+    setIsSubmitting(true);
     try {
       const res = await fetch(
         "https://wedding-invite-backed-production.up.railway.app/api/weddingInvite",
@@ -94,11 +203,13 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         },
       );
 
       if (res.ok) {
+        alert("送信いたしました。");
+        reset();
         onClose();
       } else {
         alert("送信に失敗しました。");
@@ -106,9 +217,13 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
     } catch (error) {
       console.error("エラー：", error);
       alert("通信エラーが発生しました。");
+    } finally {
+      // 送信終了
+      setIsSubmitting(false);
     }
   };
 
+  // モーダル表示時のスクロール制御
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -121,6 +236,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
+  // 招待ステータスの監視
   const attendance = watch("attendance");
   const showSpeech = attendance === ATTENDANCE.ABSENT;
 
@@ -352,7 +468,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                         onChange={field.onChange}
                         options={[
                           { label: "あ　り", value: FLG.TRUE },
-                          { label: "な　し", value: FLG.FALES },
+                          { label: "な　し", value: FLG.FALSE },
                         ]}
                       />
                       {errors.dogAllegy && <p>{errors.dogAllegy?.message}</p>}
@@ -372,9 +488,30 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
               </div>
               <button
                 type="submit"
-                className="px-16 py-4 rounded-lg border bg-gradient-to-r from-[#739A94] via-[#637863] to-[#555A38] text-white"
+                disabled={isSubmitting}
+                className="px-16 py-4 rounded-lg border text-white"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, var(--color-custom-green-1), var(--color-custom-green-2), var(--color-custom-green-3))",
+                  transition: "background-image 0.3s ease-in-out",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundImage =
+                    "linear-gradient(to right, var(--color-custom-green-2), var(--color-custom-green-3), var(--color-custom-green-1))";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundImage =
+                    "linear-gradient(to right, var(--color-custom-green-1), var(--color-custom-green-2), var(--color-custom-green-3))";
+                }}
               >
-                送　信
+                {isSubmitting ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="border-t-white border-2 border-white border-solid w-4 h-4 rounded-full animate-spin"></span>
+                    <span>送信中...</span>
+                  </div>
+                ) : (
+                  "送　信"
+                )}
               </button>
             </div>
           </motion.div>

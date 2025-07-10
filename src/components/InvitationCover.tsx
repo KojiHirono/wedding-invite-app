@@ -6,6 +6,8 @@ const InvitationCover = () => {
   const controls = useAnimation();
   const [isAnimating, setIsAnimating] = useState(true);
 
+  // ページ初期ロード時に、ストロークアニメーション中はスクロール禁止にし、
+  // アニメーション終了後にスクロールを許可して別のアニメーションを開始する
   useEffect(() => {
     // 強制トップにスクロール
     window.scrollTo(0, 0);
@@ -13,6 +15,7 @@ const InvitationCover = () => {
     // 初期にスクロールを制御
     document.body.style.overflow = "hidden";
 
+    // CSSストロークアニメーション後のアニメーション
     const timer = setTimeout(() => {
       controls.start({
         top: "2rem",
@@ -21,15 +24,15 @@ const InvitationCover = () => {
         position: "relative",
         transition: { duration: 1 },
       });
-      // 背景を消す
-      // setIsAnimating(false);
 
       // スクロールを許可
       document.body.style.overflow = "auto";
     }, 5000);
 
     return () => {
+      // 時間をリセット
       clearTimeout(timer);
+      // スクロールを許可
       document.body.style.overflow = "auto";
     };
   }, [controls]);
@@ -46,8 +49,8 @@ const InvitationCover = () => {
         />
       )}
       <div
-        style={{ fontFamily: "Jomolihar, serif" }}
-        className="text-center space-y-11 text-3xl md:text-5xl min-h-screen w-full overflow-hidden"
+        // style={{ fontFamily: "Jomolihar, serif" }}
+        className="text-center space-y-11 text-3xl md:text-5xl min-h-screen w-full overflow-x-hidden mb-10 font-[Jomolihar,serif]"
       >
         <motion.div
           initial={{
@@ -56,7 +59,7 @@ const InvitationCover = () => {
             left: "50%",
             x: "-50%",
             y: "-50%",
-            // scale: 1.2,
+            scale: 2,
             opacity: 1,
           }}
           animate={controls}

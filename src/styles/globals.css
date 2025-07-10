@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @tailwind utilities; /* ← これ絶対必要！ */
 
+@theme {
+  --color-custom-green-1: #739a94;
+  --color-custom-green-2: #637863;
+  --color-custom-green-3: #555a38;
+  --color-custom-green-4: #1b391c;
+  --color-custom-green-5: #b5beaa;
+}
+
 @font-face {
   font-family: "Jomolhari";
   src: url("/fonts/Jomolhari.ttf") format("truetype");
@@ -29,7 +37,7 @@
   stroke-width: 1px;
   stroke-dasharray: 500;
   stroke-dashoffset: 500;
-  animation: draw 5s ease-out forwards;
+  animation: draw 3s ease-out forwards;
 }
 
 @keyframes swing {

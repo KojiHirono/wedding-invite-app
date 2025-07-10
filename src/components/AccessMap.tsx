@@ -41,7 +41,6 @@ export default function AccessMap() {
               zoom={17}
             >
               <Marker position={center} />
-              {/* 課金アカウントにする必要あり 無料枠が自動で適用されます（例：Maps JavaScript API は約28,000回表示/月まで無料） */}
             </GoogleMap>
           </LoadScript>
         </div>
@@ -56,7 +55,20 @@ export default function AccessMap() {
           transition={{ duration: 1, ease: "easeOut" }}
           viewport={{ once: false, amount: 0.2 }}
           onClick={() => setModalOpen(true)}
-          className="bg-gradient-to-r from-[#739A94] via-[#637863] to-[#555A38] text-white px-16 py-4 rounded-4xl shadow-lg hover:from-[#637863] hover:via-[#555A38] hover:to-[#739A94]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, var(--color-custom-green-1), var(--color-custom-green-2), var(--color-custom-green-3))",
+            transition: "background-image 0.3s ease-in-out",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundImage =
+              "linear-gradient(to right, var(--color-custom-green-2), var(--color-custom-green-3), var(--color-custom-green-1))";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundImage =
+              "linear-gradient(to right, var(--color-custom-green-1), var(--color-custom-green-2), var(--color-custom-green-3))";
+          }}
+          className=" text-white px-16 py-4 rounded-4xl shadow-lg"
         >
           招待状に回答する
         </motion.button>

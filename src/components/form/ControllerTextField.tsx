@@ -51,9 +51,6 @@ const ControllerTextField: React.FC<Props> = ({
                 className={inputClass}
               />
             )}
-            {/* {errors?.[name] && (
-              <p className="text-red-500 text-left">{errors[name]?.message}</p>
-            )} */}
           </div>
         );
       }}
