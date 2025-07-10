@@ -16,7 +16,6 @@ const center = {
 
 export default function AccessMap() {
   const [isModalOpen, setModalOpen] = useState(false);
-  console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!);
   return (
     <>
       <motion.div
