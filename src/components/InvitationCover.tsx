@@ -81,6 +81,7 @@ const InvitationCover = () => {
           sizes="100vw"
           className="w-full"
           alt=""
+          priority
         />
         <div>
           <p>KOJI & YUKI</p>
