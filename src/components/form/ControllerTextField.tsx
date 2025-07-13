@@ -11,8 +11,20 @@ type Props = {
   placeholder: string;
   isTextArea?: boolean;
   isFlexHarf?: boolean;
+
+  type?: React.HTMLInputTypeAttribute;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+  pattern?: string;
+  autoComplete?: string;
+  maxLength?: number;
 };
 
+/**
+ * コントローラテキスト用コンポーネント
+ *
+ * @param param0
+ * @returns
+ */
 const ControllerTextField: React.FC<Props> = ({
   name,
   control,
@@ -20,6 +32,11 @@ const ControllerTextField: React.FC<Props> = ({
   placeholder,
   isTextArea = false,
   isFlexHarf = false,
+  type = "text",
+  inputMode,
+  pattern,
+  autoComplete,
+  maxLength,
 }) => {
   return (
     <Controller
@@ -32,7 +49,7 @@ const ControllerTextField: React.FC<Props> = ({
               isFlexHarf ? "flex-[1/2]" : "flex-1"
             }`
           : `bg-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200 ${
-              isFlexHarf ? "flex-[1/2] " : "flex-1"
+              isFlexHarf ? "flex-[1/2]" : "flex-1"
             }`;
         return (
           <div className="flex w-full flex-col">
@@ -42,6 +59,7 @@ const ControllerTextField: React.FC<Props> = ({
                 onChange={field.onChange}
                 placeholder={placeholder}
                 className={inputClass}
+                maxLength={maxLength}
               />
             ) : (
               <TextField
@@ -49,6 +67,11 @@ const ControllerTextField: React.FC<Props> = ({
                 onChange={field.onChange}
                 placeholder={placeholder}
                 className={inputClass}
+                type={type}
+                inputMode={inputMode}
+                pattern={pattern}
+                autoComplete={autoComplete}
+                maxLength={maxLength}
               />
             )}
           </div>

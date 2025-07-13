@@ -6,6 +6,12 @@ type Props = {
   errors?: FieldErrors<AttendanceForm>;
 };
 
+/**
+ * Eメール用コンポーネント
+ *
+ * @param param0
+ * @returns
+ */
 const EmailInput: React.FC<Props> = ({ control, errors }) => {
   const domainOptions = [
     "@yahoo.co.jp",
@@ -40,11 +46,11 @@ const EmailInput: React.FC<Props> = ({ control, errors }) => {
               : "bg-white p-2 flex-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-200";
             return (
               <>
-                <div className="flex flex-col justify-start w-full">
-                  <div className="flex flex-col md:flex-row gap-2 md:items-center">
-                    <div className="flex flex-col justify-start w-full">
+                <div className="flex w-full flex-col justify-start">
+                  <div className="flex flex-col gap-2 md:flex-row md:items-center">
+                    <div className="flex w-full flex-col justify-start">
                       <input
-                        type="text"
+                        type="email"
                         name="email"
                         placeholder={
                           domainField.value === "その他"
@@ -54,6 +60,8 @@ const EmailInput: React.FC<Props> = ({ control, errors }) => {
                         value={emailField.value}
                         onChange={emailField.onChange}
                         className={inputClassEmail}
+                        autoComplete="email"
+                        maxLength={50}
                       />
                     </div>
                     <div className="flex flex-1">
@@ -71,7 +79,7 @@ const EmailInput: React.FC<Props> = ({ control, errors }) => {
                     </div>
                   </div>
                   {(errors?.email || errors?.domain) && (
-                    <p className="text-red-500 text-left">
+                    <p className="text-red-500 md:text-left">
                       {errors.email?.message || errors.domain?.message}
                     </p>
                   )}

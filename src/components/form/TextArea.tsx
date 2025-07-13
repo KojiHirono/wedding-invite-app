@@ -3,13 +3,21 @@ type Props = {
   onChange: (value: string) => void;
   placeholder: string;
   className?: string;
+  maxLength?: number;
 };
 
+/**
+ * テキストエリア用コンポーネント
+ *
+ * @param param0
+ * @returns
+ */
 const TextArea: React.FC<Props> = ({
   placeholder,
   value,
   onChange,
   className,
+  maxLength,
 }) => {
   return (
     <div className="flex w-full">
@@ -18,6 +26,7 @@ const TextArea: React.FC<Props> = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className={className}
+        maxLength={maxLength}
       />
     </div>
   );

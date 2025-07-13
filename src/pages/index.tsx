@@ -6,6 +6,11 @@ import InvitationCover from "@/components/InvitationCover";
 import Image from "next/image";
 import { useEffect } from "react";
 
+/**
+ * ホームコンポーネント
+ *
+ * @returns
+ */
 export default function Home() {
   useEffect(() => {
     console.log(
@@ -32,11 +37,12 @@ export default function Home() {
         <BrideGroomIntro />
         <CountdownTimer />
         <div
+          // gradient-to-r が効かない端末対応
           style={{
             backgroundImage:
               "linear-gradient(to bottom, rgba(115,154,148,0.5), var(--color-custom-green-4))",
           }}
-          className="relative bg-gradient-to-b from-custom-green-1/50 to-custom-green-4 py-12"
+          className="from-custom-green-1/50 to-custom-green-4 relative bg-gradient-to-b py-12"
         >
           <GreetingSection />
           <AccessMap />
@@ -45,7 +51,7 @@ export default function Home() {
             width={0}
             height={0}
             sizes="100vw"
-            className="absolute bottom-0 left-0 w-10 lg:w-32"
+            className="absolute bottom-0 left-0 w-10 md:w-20"
             alt=""
           />
           <Image
@@ -53,7 +59,7 @@ export default function Home() {
             width={0}
             height={0}
             sizes="100vw"
-            className="absolute bottom-0 right-0 w-10 lg:w-32"
+            className="absolute right-0 bottom-0 w-10 md:w-20"
             alt=""
           />
         </div>

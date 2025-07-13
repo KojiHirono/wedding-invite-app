@@ -1,6 +1,11 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+/**
+ * 結婚挨拶コンポーネント
+ *
+ * @returns
+ */
 const BrideGroomIntro = () => {
   return (
     <>
@@ -9,26 +14,26 @@ const BrideGroomIntro = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
         viewport={{ once: true, amount: 0.5 }}
-        className="relative mx-2.5 md:mx-10 text-black"
+        className="relative mx-2.5 text-black md:mx-10"
       >
         <Image
           src="/images/brigeGroomIntoroLayer2.png"
           width={0}
           height={0}
           sizes="100vw"
-          className="w-full h-auto"
+          className="h-auto w-full"
           alt=""
         />
-        <div className="rounded-2xl shadow-2xl bg-[url('/images/brigeGroomIntoro.jpg')] bg-cover bg-center px-2 py-14 mb-10 mx-2.5 md:mx-auto">
+        <div className="mx-2.5 mb-10 rounded-2xl bg-[url('/images/brigeGroomIntoro.jpg')] bg-cover bg-center px-2 py-14 shadow-2xl md:mx-auto">
           <Image
             src="/images/brigeGroomIntoroLayer.png"
             width={0}
             height={0}
             sizes="100vw"
-            className="mx-auto w-24 md:w-50 mb-10"
+            className="mx-auto mb-10 w-24 md:w-50"
             alt=""
           />
-          <div className="text-center space-y-5 md:space-y-10">
+          <div className="space-y-5 text-center md:space-y-10">
             <div>
               <p>
                 皆さまいかがお過ごしでしょうか

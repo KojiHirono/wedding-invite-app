@@ -14,7 +14,12 @@ const center = {
   lng: 140.05954510947535,
 };
 
-export default function AccessMap() {
+/**
+ * アクセス情報コンポーネント
+ *
+ * @returns
+ */
+const AccessMap = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   return (
     <>
@@ -23,10 +28,10 @@ export default function AccessMap() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
         viewport={{ once: true, amount: 0.2 }}
-        className="relative rounded-2xl bg-[url('/images/countDownTimerBg.jpg')] bg-[0%_50%] bg-no-repeat bg-cover mx-2.5 md:mx-10 p-10 md:p-20 text-center"
+        className="relative mx-2.5 rounded-2xl bg-[url('/images/countDownTimerBg.jpg')] bg-cover bg-[0%_50%] bg-no-repeat p-10 text-center md:mx-10 md:p-20"
       >
-        <p className="mb-5 md:mb-14 font-bold text-xl">アコールハーブ</p>
-        <div className="md:space-y-2 mb-7">
+        <p className="mb-5 text-xl font-bold md:mb-14">アコールハーブ</p>
+        <div className="mb-7 md:space-y-2">
           <p>www.accord-herbe.jp</p>
           <p>〒274-0060千葉県船橋市坪井東1丁目1-11</p>
           <p>047-461-5550</p>
@@ -55,6 +60,7 @@ export default function AccessMap() {
           transition={{ duration: 1, ease: "easeOut" }}
           viewport={{ once: false, amount: 0.2 }}
           onClick={() => setModalOpen(true)}
+          // gradient-to-r が効かない端末対応
           style={{
             backgroundImage:
               "linear-gradient(to right, var(--color-custom-green-1), var(--color-custom-green-2), var(--color-custom-green-3))",
@@ -68,7 +74,7 @@ export default function AccessMap() {
             e.currentTarget.style.backgroundImage =
               "linear-gradient(to right, var(--color-custom-green-1), var(--color-custom-green-2), var(--color-custom-green-3))";
           }}
-          className=" text-white px-16 py-4 rounded-4xl shadow-lg"
+          className="rounded-4xl px-16 py-4 text-white shadow-lg"
         >
           招待状に回答する
         </motion.button>
@@ -87,4 +93,6 @@ export default function AccessMap() {
       </motion.div>
     </>
   );
-}
+};
+
+export default AccessMap;

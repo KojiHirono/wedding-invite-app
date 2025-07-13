@@ -1,6 +1,11 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+/**
+ * イベント情報枠コンポーネント
+ *
+ * @returns
+ */
 export default function GreetingSection() {
   return (
     <>
@@ -12,13 +17,13 @@ export default function GreetingSection() {
           viewport={{ once: true, amount: 0.5 }}
           className="relative mx-auto mb-24 w-auto"
         >
-          <div className="relative z-20 bg-[url('/images/countDownTimerBg.jpg')] bg-[position:0%_50%] bg-no-repeat bg-cover border-8 border-custom-green-5 shadow-lg w-fit m-auto p-10 md:px-10 md:py-20 text-center space-y-2.5">
-            <h2 className="text-3xl md:text-5xl font-bold">EVENT</h2>
+          <div className="border-custom-green-5 relative z-20 m-auto w-fit space-y-2.5 border-8 bg-[url('/images/countDownTimerBg.jpg')] bg-cover bg-[position:0%_50%] bg-no-repeat p-10 text-center shadow-lg md:px-10 md:py-20">
+            <h2 className="text-3xl font-bold md:text-5xl">EVENT</h2>
             <p>2025年10月10日（金）</p>
             <h3 className="font-bold">◇挙式◇</h3>
             <div>
               <p>12時00分（受付　11時00分）</p>
-              <p className="text-xs md:text-base text-red-500">
+              <p className="text-xs text-red-500 md:text-base">
                 11時45分までに挙式会場へお越しください
               </p>
             </div>
@@ -30,7 +35,7 @@ export default function GreetingSection() {
             width={0}
             height={0}
             sizes="100vw"
-            className="absolute z-30 md:z-10 top-[200px] md:bottom-0 md:right-1 w-[200px] md:w-[200px] h-auto"
+            className="absolute top-[200px] z-30 h-auto w-[200px] md:right-1 md:bottom-0 md:z-10 md:w-[200px]"
             alt=""
           />
         </motion.div>

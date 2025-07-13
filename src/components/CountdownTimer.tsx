@@ -9,6 +9,11 @@ type TimeLeft = {
   seconds: number;
 };
 
+/**
+ * カウントダウンコンポーネント
+ *
+ * @returns
+ */
 const CountdownTimer = () => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
@@ -51,7 +56,7 @@ const CountdownTimer = () => {
     <>
       <div
         style={{ fontFamily: "Jomolihar, serif" }}
-        className="relative bg-[url('/images/countDownTimerBg.jpg')] bg-[0%_50%] shadow-inner bg-no-repeat bg-cover overflow-x-hidden overflow-y-hidden font-gerbera"
+        className="font-gerbera relative overflow-x-hidden overflow-y-hidden bg-[url('/images/countDownTimerBg.jpg')] bg-cover bg-[0%_50%] bg-no-repeat shadow-inner"
       >
         <motion.div
           initial={{ opacity: 0, x: -100 }}
@@ -66,7 +71,7 @@ const CountdownTimer = () => {
             height={0}
             sizes="100vw"
             alt=""
-            className="absolute bottom-0 left-0 w-52 md:w-72 z-10 opacity-50"
+            className="absolute bottom-0 left-0 z-10 w-52 opacity-50 md:w-72"
           />
         </motion.div>
         <motion.div
@@ -81,7 +86,7 @@ const CountdownTimer = () => {
             width={0}
             height={0}
             sizes="100vw"
-            className="absolute top-0 right-0 w-52 md:w-72 z-10 opacity-50"
+            className="absolute top-0 right-0 z-10 w-52 opacity-50 md:w-72"
             alt=""
           />
         </motion.div>
@@ -90,10 +95,10 @@ const CountdownTimer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
           viewport={{ once: false, amount: 0.5 }}
-          className="relative text-center z-20"
+          className="relative z-20 text-center"
         >
-          <p className="text-xl md:text-3xl mb-2.5">COUNTDOWN</p>
-          <div className="text-5xl md:text-7xl mb-2.5">
+          <p className="mb-2.5 text-xl md:text-3xl">COUNTDOWN</p>
+          <div className="mb-2.5 text-5xl md:text-7xl">
             <p>{timeLeft.days}</p>
             <p>DAYS</p>
           </div>
@@ -103,7 +108,7 @@ const CountdownTimer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
           viewport={{ once: false, amount: 0.2 }}
-          className="flex justify-center gap-12 relative z-20"
+          className="relative z-20 flex justify-center gap-12"
         >
           <div className="text-center">
             <p className="text-3xl md:text-5xl">{timeLeft.hours}</p>

@@ -11,7 +11,13 @@ type Props = {
   className?: string;
 };
 
-export const RadioGroup: React.FC<Props> = ({
+/**
+ * ラジオグループ用コンポーネント
+ *
+ * @param param0
+ * @returns
+ */
+const RadioGroup: React.FC<Props> = ({
   name,
   value,
   onChange,
@@ -23,11 +29,12 @@ export const RadioGroup: React.FC<Props> = ({
       {options.map((opt) => (
         <label
           key={opt.value}
-          className={`px-4 py-2 rounded-lg border flex-1 ${className} ${
+          className={`flex-1 rounded-lg border px-4 py-2 ${className} ${
             value === opt.value
               ? "text-white"
-              : "bg-white text-green-800 border-gray-300"
+              : "border-gray-300 bg-white text-green-800"
           } transition-colors`}
+          // gradient-to-r が効かない端末対応
           style={
             value === opt.value
               ? {
@@ -51,3 +58,5 @@ export const RadioGroup: React.FC<Props> = ({
     </>
   );
 };
+
+export default RadioGroup;

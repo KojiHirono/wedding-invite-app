@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RadioGroup } from "./form/RadioGroup";
+import RadioGroup from "./form/RadioGroup";
 import FormLabel from "./form/FormLabel";
 import EmailInput from "./form/EmailInput";
 import AddressField from "./form/AddressField";
@@ -56,12 +56,12 @@ const schema = z
       .string()
       .min(1, MESSAGE.NAME_REQUIRED)
       .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
-      .regex(/^[ぁ-んー　]+$/, MESSAGE.NAME_KANA_INVALID_FORMAT),
+      .regex(/^[\u3040-\u309Fー]+$/, MESSAGE.NAME_KANA_INVALID_FORMAT),
     firstNameKana: z
       .string()
       .min(1, MESSAGE.NAME_REQUIRED)
       .max(50, "50" + MESSAGE.MAX_TEXT_LENGTH_EXCEEDED)
-      .regex(/^[ぁ-んー　]+$/, MESSAGE.NAME_KANA_INVALID_FORMAT),
+      .regex(/^[\u3040-\u309Fー]+$/, MESSAGE.NAME_KANA_INVALID_FORMAT),
     lastNameRomaji: z
       .string()
       .min(1, MESSAGE.NAME_REQUIRED)
@@ -149,6 +149,12 @@ type Props = {
 // フォーム型定義
 export type AttendanceForm = z.infer<typeof schema>;
 
+/**
+ * 招待モーダルコンポーネント
+ *
+ * @param param0
+ * @returns
+ */
 const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
   // フォーム管理
   const {
@@ -157,6 +163,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
     watch,
     setValue,
     setError,
+    clearErrors,
     reset,
     formState: { errors },
   } = useForm<AttendanceForm>({
@@ -197,7 +204,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
     setIsSubmitting(true);
     try {
       const res = await fetch(
-        "https://wedding-invite-backed-production.up.railway.app/api/weddingInvite",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/weddingInvite`,
         {
           method: "POST",
           headers: {
@@ -245,28 +252,28 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
       {isOpen && (
         <motion.form
           onSubmit={handleSubmit(onSubmit)}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           noValidate
         >
           <motion.div
-            className="bg-[url('/images/brigeGroomIntoro.jpg')] rounded-2xl shadow-lg w-full md:max-w-3xl relative max-h-[90vh] overflow-hidden m-2.5"
+            className="relative m-2.5 max-h-[90vh] w-full overflow-hidden rounded-2xl bg-[url('/images/brigeGroomIntoro.jpg')] shadow-lg md:max-w-3xl"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 50, opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="max-h-[90vh] overflow-y-auto space-y-4 p-6">
+            <div className="max-h-[90vh] space-y-4 overflow-y-auto p-6">
               <button
                 type="button"
                 onClick={onClose}
-                className="block ml-auto border bg-white text-green-800 border-gray-300 rounded-lg px-4 py-2 font-bold"
+                className="ml-auto block rounded-lg border border-gray-300 bg-white px-4 py-2 font-bold text-green-800"
               >
                 × とじる
               </button>
-              <div className="relative flex gap-20 items-center justify-center mb-14">
+              <div className="relative mb-14 flex items-center justify-center gap-20">
                 <div className="absolute left-1/2 -translate-x-1/2">
                   <Image
                     src="/images/countDownTimerLayer3.png"
@@ -282,7 +289,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute -top-5 right-15 bg-white border border-gray-300 rounded-lg px-3 py-1 shadow w-full"
+                        className="absolute -top-5 right-15 w-full rounded-lg border border-gray-300 bg-white px-3 py-1 shadow"
                       >
                         あぁ...
                       </motion.div>
@@ -309,7 +316,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel
                   label="ゲストカテゴリー"
                   hint="Guest Category"
@@ -343,81 +350,87 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 />
               </div>
 
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="名前" hint="Name" required />
                 <div className="flex w-full flex-col">
-                  <div className="flex gap-2 w-full flex-col md:flex-row">
+                  <div className="flex w-full flex-col gap-2 md:flex-row">
                     <ControllerTextField
                       name="lastName"
                       control={control}
                       errors={errors}
                       placeholder="湯"
+                      maxLength={50}
                     />
                     <ControllerTextField
                       name="firstName"
                       control={control}
                       errors={errors}
                       placeholder="婆婆"
+                      maxLength={50}
                     />
                   </div>
                   {(errors?.lastName || errors?.firstName) && (
-                    <p className="text-red-500 text-left">
+                    <p className="text-red-500 md:text-left">
                       {errors.lastName?.message || errors.firstName?.message}
                     </p>
                   )}
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="かな" hint="Kana" required />
                 <div className="flex w-full flex-col">
-                  <div className="flex gap-2 w-full flex-col md:flex-row">
+                  <div className="flex w-full flex-col gap-2 md:flex-row">
                     <ControllerTextField
                       name="lastNameKana"
                       control={control}
                       errors={errors}
                       placeholder="ゆ"
+                      maxLength={50}
                     />
                     <ControllerTextField
                       name="firstNameKana"
                       control={control}
                       errors={errors}
                       placeholder="ばーば"
+                      maxLength={50}
                     />
                   </div>
                   {(errors?.lastNameKana || errors?.firstNameKana) && (
-                    <p className="text-red-500 text-left">
+                    <p className="text-red-500 md:text-left">
                       {errors.lastNameKana?.message ||
                         errors.firstNameKana?.message}
                     </p>
                   )}
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="ローマ字" hint="Latin Alphabet" required />
                 <div className="flex w-full flex-col">
-                  <div className="flex gap-2 w-full flex-col md:flex-row">
+                  <div className="flex w-full flex-col gap-2 md:flex-row">
                     <ControllerTextField
                       name="lastNameRomaji"
                       control={control}
                       errors={errors}
                       placeholder="yu"
+                      maxLength={50}
                     />
                     <ControllerTextField
                       name="firstNameRomaji"
                       control={control}
                       errors={errors}
                       placeholder="ba-ba"
+                      maxLength={50}
                     />
                   </div>
                   {(errors?.lastNameRomaji || errors?.firstNameRomaji) && (
-                    <p className="text-red-500 text-left">
+                    <p className="text-red-500 md:text-left">
                       {errors.lastNameRomaji?.message ||
                         errors.firstNameRomaji?.message}
                     </p>
                   )}
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel
                   label="メールアドレス"
                   hint="Email Address"
@@ -425,27 +438,36 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 />
                 <EmailInput control={control} errors={errors} />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="電話番号" hint="Phone" required={false} />
-                <ControllerTextField
-                  name="phone"
-                  control={control}
-                  errors={errors}
-                  placeholder="08012345678"
-                />
-                {errors?.phone && (
-                  <p className="text-red-500 text-left">
-                    {errors.phone?.message}
-                  </p>
-                )}
+                <div className="flex w-full flex-col">
+                  <ControllerTextField
+                    name="phone"
+                    control={control}
+                    errors={errors}
+                    placeholder="08012345678"
+                    type="tel"
+                    inputMode="numeric"
+                    pattern="\d{10,11}"
+                    autoComplete="tel"
+                    maxLength={11}
+                    isFlexHarf
+                  />
+                  {errors?.phone && (
+                    <p className="text-red-500 md:text-left">
+                      {errors.phone?.message}
+                    </p>
+                  )}
+                </div>
               </div>
               <AddressField
                 control={control}
                 errors={errors}
                 setValue={setValue}
                 setError={setError}
+                clearErrors={clearErrors}
               />
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="アレルギー" hint="Allergy" required={false} />
                 <ControllerTextField
                   name="allergy"
@@ -453,9 +475,10 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   errors={errors}
                   placeholder="えび　かに　そば　卵　乳　どんぐり　etc."
                   isTextArea
+                  maxLength={125}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="犬アレルギー" hint="Dog Allegy" required />
                 <Controller
                   name="dogAllegy"
@@ -476,7 +499,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 />
               </div>
-              <div className="flex flex-col md:flex-row gap-2 md:items-center">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="メッセージ" hint="Message" required={false} />
                 <ControllerTextField
                   name="message"
@@ -484,12 +507,14 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   errors={errors}
                   placeholder="ご自由にご入力ください"
                   isTextArea
+                  maxLength={125}
                 />
               </div>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-16 py-4 rounded-lg border text-white"
+                className="rounded-lg border px-16 py-4 text-white"
+                // gradient-to-r が効かない端末対応
                 style={{
                   backgroundImage:
                     "linear-gradient(to right, var(--color-custom-green-1), var(--color-custom-green-2), var(--color-custom-green-3))",
@@ -506,7 +531,7 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center gap-2">
-                    <span className="border-t-white border-2 border-white border-solid w-4 h-4 rounded-full animate-spin"></span>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-white"></span>
                     <span>送信中...</span>
                   </div>
                 ) : (
