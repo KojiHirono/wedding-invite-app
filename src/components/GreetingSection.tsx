@@ -28,7 +28,7 @@ export default function GreetingSection() {
               </p>
             </div>
             <h3 className="font-bold">◇披露宴◇</h3>
-            <p>13時00分</p>
+            <p>12時45分</p>
           </div>
           <Image
             src="/images/greetingSectionLayer.png"
