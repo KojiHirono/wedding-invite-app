@@ -38,7 +38,9 @@ const BrideGroomIntro = () => {
               <p>
                 皆さまいかがお過ごしでしょうか
                 <br />
-                このたび私たちは結婚式を挙げることになりました
+                このたび私たちは
+                <br />
+                結婚式を挙げることになりました
                 <br />
                 つきましてはご挨拶をかねて
                 <br />
@@ -51,12 +53,11 @@ const BrideGroomIntro = () => {
               </p>
             </div>
             <div>
-              <p>敬具</p>
               <p>令和7年7月吉日</p>
             </div>
-            <div>
+            <div className="inline-block text-left">
               <p>廣野　晃司</p>
-              <p>廣野　有希</p>
+              <p>廣野　有希（旧姓：近藤）</p>
             </div>
           </div>
         </div>
