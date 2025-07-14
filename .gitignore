@@ -42,3 +42,6 @@ next-env.d.ts
 
 # ビルド成果物除外
 dist
+
+#vscodeのプラグライン
+.prettierrc
