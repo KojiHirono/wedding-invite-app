@@ -480,24 +480,36 @@ const AttendanceModal: React.FC<Props> = ({ isOpen, onClose }) => {
               </div>
               <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="犬アレルギー" hint="Dog Allegy" required />
-                <Controller
-                  name="dogAllegy"
-                  control={control}
-                  render={({ field }) => (
-                    <>
-                      <RadioGroup
-                        name="dogAllegy"
-                        value={field.value}
-                        onChange={field.onChange}
-                        options={[
-                          { label: "あ　り", value: FLG.TRUE },
-                          { label: "な　し", value: FLG.FALSE },
-                        ]}
-                      />
-                      {errors.dogAllegy && <p>{errors.dogAllegy?.message}</p>}
-                    </>
-                  )}
-                />
+                <div className="flex w-full flex-col">
+                  <div className="flex flex-col gap-2 md:flex-row">
+                    <Controller
+                      name="dogAllegy"
+                      control={control}
+                      render={({ field }) => (
+                        <>
+                          <RadioGroup
+                            name="dogAllegy"
+                            value={field.value}
+                            onChange={field.onChange}
+                            options={[
+                              { label: "あ　り", value: FLG.TRUE },
+                              { label: "な　し", value: FLG.FALSE },
+                            ]}
+                          />
+                          {errors.dogAllegy && (
+                            <p>{errors.dogAllegy?.message}</p>
+                          )}
+                        </>
+                      )}
+                    />
+                  </div>
+                  <div className="inline-block text-left text-xs text-red-500 md:text-base">
+                    <p>当日は愛犬が参加予定です</p>
+                    <p>
+                      犬アレルギーをお持ちの方は事前にお伺い出来ますと幸いです
+                    </p>
+                  </div>
+                </div>
               </div>
               <div className="flex flex-col gap-2 md:flex-row md:items-center">
                 <FormLabel label="メッセージ" hint="Message" required={false} />
