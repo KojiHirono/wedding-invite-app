@@ -57,7 +57,12 @@ const BrideGroomIntro = () => {
             </div>
             <div className="inline-block text-left">
               <p>廣野　晃司</p>
-              <p>廣野　有希（旧姓：近藤）</p>
+              <p className="relative inline-block">
+                　　　有希
+                <span className="absolute top-1/2 left-full ml-1 -translate-y-1/2 text-xs whitespace-nowrap text-gray-600 md:text-base">
+                  （旧姓：近藤）
+                </span>
+              </p>
             </div>
           </div>
         </div>
